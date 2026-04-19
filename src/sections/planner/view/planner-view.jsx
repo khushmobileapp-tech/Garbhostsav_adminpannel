@@ -792,7 +792,7 @@ export default function PlannerView() {
             />
 
             <TextField
-              label="Audio URL"
+              label="Audio URL / file reference"
               value={editorState.values.media_url}
               onChange={(event) =>
                 setEditorState((current) => ({
@@ -803,7 +803,7 @@ export default function PlannerView() {
             />
 
             <TextField
-              label="Video URL"
+              label="Video URL / file reference"
               value={editorState.values.video_url}
               onChange={(event) =>
                 setEditorState((current) => ({
@@ -1056,7 +1056,7 @@ export default function PlannerView() {
             />
 
             <TextField
-              label="Audio URL"
+              label="Audio URL / file reference"
               value={bulkRuleState.values.media_url}
               onChange={(event) =>
                 setBulkRuleState((current) => ({
@@ -1067,7 +1067,7 @@ export default function PlannerView() {
             />
 
             <TextField
-              label="Video URL"
+              label="Video URL / file reference"
               value={bulkRuleState.values.video_url}
               onChange={(event) =>
                 setBulkRuleState((current) => ({
@@ -1238,8 +1238,8 @@ function normalizeActivity(activity) {
     type: activity.type || 'generic',
     title: activity.title || '',
     content: activity.content || '',
-    media_url: activity.media_url || '',
-    video_url: activity.video_url || activity.youtube_video_url || '',
+    media_url: normalizeResourceValue(activity.media_url),
+    video_url: normalizeResourceValue(activity.video_url || activity.youtube_video_url),
     sub_activities: (activity.sub_activities || []).map((item) => ({
       id: item.id || '',
       type: item.type || 'video',
@@ -1400,4 +1400,8 @@ function buildActivityContentPayloads(activityId, values) {
   });
 
   return items;
+}
+
+function normalizeResourceValue(value) {
+  return typeof value === 'string' ? value : '';
 }
